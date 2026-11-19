@@ -1,0 +1,612 @@
+/* =============================================================================
+   Unity Texture Mult4 - Estilos CSS Modernos, Accesibles y Responsive
+   ============================================================================= */
+
+:root {
+  --bg-primary: #18191c;
+  --bg-secondary: #222429;
+  --bg-card: #2a2d34;
+  --bg-card-hover: #32363e;
+  --border-color: #3b3f49;
+  --border-focus: #4f80ff;
+  
+  --text-main: #f0f2f5;
+  --text-muted: #9ba1b0;
+  --text-highlight: #ffffff;
+
+  --accent-blue: #3b82f6;
+  --accent-blue-hover: #2563eb;
+  
+  --status-good-bg: rgba(34, 197, 94, 0.15);
+  --status-good-border: #22c55e;
+  --status-good-text: #4ade80;
+
+  --status-bad-bg: rgba(245, 158, 11, 0.15);
+  --status-bad-border: #f59e0b;
+  --status-bad-text: #fbbf24;
+
+  --status-error-bg: rgba(239, 68, 68, 0.15);
+  --status-error-border: #ef4444;
+  --status-error-text: #f87171;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --transition-fast: 0.15s ease;
+  --font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Enlaces y foco accesible */
+a {
+  color: var(--accent-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+a:hover {
+  color: var(--accent-blue-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  flex: 1;
+}
+
+/* Header */
+.app-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--accent-blue);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+}
+
+.app-title {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: var(--text-highlight);
+  margin-bottom: 0.5rem;
+}
+
+.app-subtitle {
+  color: var(--text-muted);
+  max-width: 720px;
+  margin: 0 auto;
+  font-size: 0.95rem;
+}
+
+.app-subtitle code {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.15rem 0.35rem;
+  border-radius: var(--radius-sm);
+  color: var(--status-bad-text);
+  font-size: 0.85em;
+}
+
+/* Zona de Arrastrar y Soltar */
+.dropzone {
+  border: 2px dashed var(--border-color);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+  margin-bottom: 1.5rem;
+}
+
+.dropzone:hover, .dropzone.is-dragover {
+  border-color: var(--accent-blue);
+  background-color: rgba(59, 130, 246, 0.06);
+}
+
+.dropzone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.dropzone-icon {
+  width: 48px;
+  height: 48px;
+  fill: var(--accent-blue);
+  opacity: 0.9;
+}
+
+.dropzone-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-highlight);
+}
+
+.dropzone-hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.btn-file-select {
+  margin-top: 0.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-file-select:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--text-muted);
+}
+
+/* Panel de Opciones Globales */
+.options-panel {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.options-title {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.option-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.option-select, .option-input {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+
+.option-help {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.option-checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.option-checkbox-row input[type="checkbox"] {
+  accent-color: var(--accent-blue);
+  margin-top: 0.2rem;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.option-checkbox-row label {
+  font-size: 0.85rem;
+  color: var(--text-main);
+  cursor: pointer;
+}
+
+/* Barra de Resumen y Acciones en Lote */
+.batch-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-sm);
+}
+
+.stat-pill.good {
+  border-color: var(--status-good-border);
+  color: var(--status-good-text);
+}
+
+.stat-pill.bad {
+  border-color: var(--status-bad-border);
+  color: var(--status-bad-text);
+}
+
+.batch-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.btn-primary {
+  background-color: var(--accent-blue);
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--accent-blue-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+.btn-secondary:hover:not(:disabled) {
+  background-color: var(--bg-card-hover);
+}
+
+.btn-danger {
+  background-color: transparent;
+  border-color: var(--status-error-border);
+  color: var(--status-error-text);
+}
+.btn-danger:hover:not(:disabled) {
+  background-color: var(--status-error-bg);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Indicador de progreso */
+.progress-container {
+  display: none;
+  margin-bottom: 1.5rem;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: var(--bg-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  width: 0%;
+  height: 100%;
+  background-color: var(--accent-blue);
+  transition: width 0.15s ease;
+}
+
+/* Lista / Grilla de Imágenes */
+.images-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.image-card {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.image-card:hover {
+  background-color: var(--bg-card);
+}
+
+.image-card.is-good {
+  border-left: 4px solid var(--status-good-border);
+}
+
+.image-card.is-bad {
+  border-left: 4px solid var(--status-bad-border);
+}
+
+.card-thumbnail {
+  width: 80px;
+  height: 80px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.card-thumbnail img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.card-filename {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-highlight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+.badge-good {
+  background-color: var(--status-good-bg);
+  color: var(--status-good-text);
+  border: 1px solid var(--status-good-border);
+}
+
+.badge-bad {
+  background-color: var(--status-bad-bg);
+  color: var(--status-bad-text);
+  border: 1px solid var(--status-bad-border);
+}
+
+.card-dimensions {
+  font-family: monospace;
+  font-size: 0.85rem;
+}
+
+.dim-arrow {
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+.card-padding-detail {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.btn-icon {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 0.4rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.btn-icon:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.btn-icon-delete {
+  color: var(--status-error-text);
+  border-color: transparent;
+}
+.btn-icon-delete:hover {
+  background-color: var(--status-error-bg);
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Sección de Ayuda / Documentación Unity */
+.info-section {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.info-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: var(--text-highlight);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.info-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+}
+
+.info-card h4 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-highlight);
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.info-card p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* Footer */
+.app-footer {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+  .image-card {
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: auto auto;
+  }
+  .card-thumbnail {
+    width: 60px;
+    height: 60px;
+  }
+  .card-actions {
+    grid-column: 1 / -1;
+    justify-content: flex-end;
+  }
+  .batch-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .batch-buttons {
+    width: 100%;
+  }
+  .batch-buttons .btn {
+    flex: 1;
+  }
+}

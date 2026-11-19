@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unity Texture Mult4 | Corrector de Texturas Múltiplo de 4 sin Pérdida</title>
+  <meta name="description" content="Corrige dimensiones de texturas para compresión DXT5/BC3 en Unity mediante padding 1:1 sin reescalar ni perder calidad. Procesamiento 100% local en tu navegador.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Encabezado Principal -->
+    <header class="app-header">
+      <div class="header-badge">Unity Texture Tool</div>
+      <h1 class="app-title">Unity Texture Mult4</h1>
+      <p class="app-subtitle">
+        Soluciona la advertencia <code>Only textures with width/height being multiple of 4 can be compressed to DXT5|BC3 format</code> 
+        añadiendo píxeles de relleno (padding) <strong>1:1 sin reescalar ni degradar</strong> tus imágenes.
+      </p>
+    </header>
+
+    <main>
+      <!-- Zona de Arrastrar y Soltar -->
+      <section 
+        id="dropzone" 
+        class="dropzone" 
+        tabindex="0" 
+        role="button" 
+        aria-label="Arrastra imágenes aquí o pulsa para seleccionar archivos"
+      >
+        <div class="dropzone-content">
+          <svg class="dropzone-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+          </svg>
+          <div class="dropzone-title">Arrastra y suelta tus texturas aquí</div>
+          <div class="dropzone-hint">Formatos soportados: PNG, JPG/JPEG, WebP, BMP (puedes subir varias a la vez o pegar con Ctrl+V)</div>
+          <button type="button" class="btn-file-select" id="btnBrowse" aria-controls="fileInput">
+            Seleccionar archivos desde el explorador
+          </button>
+          <input type="file" id="fileInput" multiple accept="image/png,image/jpeg,image/webp,image/bmp" style="display:none;">
+        </div>
+      </section>
+
+      <!-- Panel de Opciones Globales -->
+      <section class="options-panel" aria-labelledby="optionsHeading">
+        <h2 id="optionsHeading" class="options-title">
+          <span>⚙️</span> Opciones de corrección y exportación
+        </h2>
+        <div class="options-grid">
+          
+          <!-- Ancla de Padding -->
+          <div class="option-group">
+            <label for="anchorSelect" class="option-label">Posición del ancla (origen):</label>
+            <select id="anchorSelect" class="option-select">
+              <option value="bottom-left" selected>Inferior - Izquierda (Predeterminada para Unity)</option>
+              <option value="center">Centro (Distribuido)</option>
+              <option value="top-left">Superior - Izquierda</option>
+            </select>
+            <p class="option-help" id="anchorHelpText">
+              <strong>Recomendado para Unity:</strong> El Sprite Editor mide las coordenadas desde la esquina inferior-izquierda. Añadir el relleno arriba y a la derecha mantiene intactos los rectángulos de slicing en spritesheets y atlas existentes.
+            </p>
+          </div>
+
+          <!-- Sufijo de archivo -->
+          <div class="option-group">
+            <label for="suffixInput" class="option-label">Sufijo del archivo corregido:</label>
+            <input type="text" id="suffixInput" class="option-input" value="_m4" placeholder="Ejemplo: _m4">
+            <p class="option-help">
+              💡 <strong>Importante para Unity:</strong> Déjalo <em>vacío</em> para reemplazar el archivo original en la carpeta de tu proyecto y <strong>conservar su archivo .meta, GUID, slicing y configuración de importación</strong> sin romper referencias.
+            </p>
+          </div>
+
+          <!-- Formato y Transparencia -->
+          <div class="option-group">
+            <label for="formatSelect" class="option-label">Formato de salida:</label>
+            <select id="formatSelect" class="option-select">
+              <option value="image/png" selected>PNG sin pérdida (Recomendado, conserva alfa)</option>
+              <option value="image/jpeg">JPG (Solo texturas opacas sin canal alfa)</option>
+            </select>
+            
+            <div class="option-checkbox-row" id="clampRow">
+              <input type="checkbox" id="clampEdgeCheck" checked>
+              <label for="clampEdgeCheck">
+                Replicar borde (Clamp-to-Edge) en JPG para evitar franjas que contaminen el filtrado bilineal.
+              </label>
+            </div>
+            <p class="option-help" id="formatWarningText" style="display: none; color: var(--status-bad-text);">
+              ⚠️ Re-exportar como JPG genera una nueva compresión con pérdida. Se aconseja exportar como PNG para mantener la máxima fidelidad de píxeles.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Barra de Resumen y Acciones en Lote -->
+      <section class="batch-bar" aria-label="Resumen y acciones en lote">
+        <div class="summary-stats" id="summaryStats">
+          <span class="stat-pill" id="statTotal">Total: 0</span>
+          <span class="stat-pill good" id="statGood">0 BIEN</span>
+          <span class="stat-pill bad" id="statBad">0 MAL</span>
+          <span class="stat-pill" id="statWeight">Peso: 0 B</span>
+        </div>
+
+        <div class="batch-buttons">
+          <button type="button" class="btn btn-primary" id="btnFixAll" disabled>
+            <span>✨</span> Corregir todas las pendientes
+          </button>
+          
+          <button type="button" class="btn btn-secondary" id="btnDownloadZip" disabled>
+            <span>📦</span> Descargar .ZIP
+          </button>
+          
+          <button type="button" class="btn btn-danger" id="btnClearAll" disabled>
+            <span>🗑️</span> Limpiar lista
+          </button>
+        </div>
+      </section>
+
+      <!-- Configuración del ZIP -->
+      <div style="margin-top: -0.75rem; margin-bottom: 1.25rem; font-size: 0.85rem;">
+        <label style="display: inline-flex; align-items: center; gap: 0.45rem; cursor: pointer; color: var(--text-muted);">
+          <input type="checkbox" id="zipOnlyModifiedCheck" checked style="accent-color: var(--accent-blue);">
+          <strong>Incluir solo imágenes corregidas en el archivo .ZIP</strong> (las que ya estaban BIEN no se reempaquetan).
+        </label>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div class="progress-container" id="progressContainer" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+        <div class="progress-header">
+          <span id="progressText">Procesando...</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBarFill"></div>
+        </div>
+      </div>
+
+      <!-- Contenedor dinámico de imágenes -->
+      <section class="images-container" id="imagesContainer" aria-live="polite">
+        <div class="empty-state" id="emptyState">
+          No hay texturas cargadas. Arrastra archivos aquí o selecciónalos desde tu equipo para comenzar.
+        </div>
+      </section>
+
+      <!-- Guía y Documentación para Desarrolladores de Unity -->
+      <section class="info-section">
+        <h3 class="info-title">📚 ¿Por qué Unity exige dimensiones múltiplos de 4?</h3>
+        <div class="info-grid">
+          
+          <div class="info-card">
+            <h4>🧱 Bloques de compresión DXT / BC</h4>
+            <p>
+              Formatos de GPU como <strong>DXT1, DXT5 (BC3) y BC7</strong> comprimen las texturas en bloques fijos de <strong>4x4 píxeles</strong>. Si el ancho o alto de la textura no es divisible entre 4, el hardware de la GPU no puede construir la cuadrícula completa de bloques y Unity desactiva la compresión o emite un error.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h4>🎯 ¿Por qué Padding en lugar de Reescalar?</h4>
+            <p>
+              Reescalar (interpolación bilineal/bicúbica) distorsiona los píxeles originales, genera borrosidad en pixel art y mapas de normales, y altera las coordenadas UV normalizadas. El <strong>padding 1:1</strong> añade una pequeña franja transparente de 1 a 3 píxeles sin alterar ni un solo píxel de tu arte.
+            </p>
+          </div>
+
+          <div class="info-card">
+            <h4>📐 Origen en Unity (Sprite Editor)</h4>
+            <p>
+              El Sprite Editor de Unity define las coordenadas <code>(X, Y)</code> de cada celda desde la <strong>esquina inferior-izquierda</strong>. Al colocar el padding en la parte superior y a la derecha, las posiciones absolutas de los sprites existentes permanecen intactas.
+            </p>
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>Unity Texture Mult4 | Procesamiento 100% local en tu navegador (Canvas API) sin subir datos a servidores.</p>
+      <p>Licencia MIT | Diseñado para desarrolladores y artistas técnicos de Unity.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
